@@ -59,7 +59,7 @@ This project is evolving following a structured systems engineering path:
 
 
 Acknowledgments
-Special thanks to Uğur Hoca for the guidance on perf_event_open and hardware counter strategies (L1D, L1I, and LLC monitoring). This project aims to contribute to the system programming community as a tutorial-grade exercise.
+Special thanks to @Uğurcan Caykara for the guidance on perf_event_open and hardware counter strategies (L1D, L1I, and LLC monitoring). This project aims to contribute to the system programming community as a tutorial-grade exercise.
 
 
 Author
