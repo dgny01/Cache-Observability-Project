@@ -65,4 +65,4 @@ Special thanks to Uğur Hoca for the guidance on perf_event_open and hardware co
 Author
 Doğanay Yıldız 3rd Year Computer Engineering Student GitHub | LinkedIn
 
-"Measuring the invisible at the kernel level."
+Measuring the invisible at the kernel level.
