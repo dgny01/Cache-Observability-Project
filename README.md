@@ -24,7 +24,7 @@ Modern software performance is often bottlenecked by the memory hierarchy (L1, L
 
 ---
 
-##  uick Start
+## Quick Start
 
 ### Prerequisites
 * GCC/G++ Compiler
@@ -43,7 +43,7 @@ g++ -O3 main.cpp -o cache_analyzer
 
 # Run the simulation
 ./cache_analyzer
-
+```
 
 
 Roadmap & eBPF Integration
