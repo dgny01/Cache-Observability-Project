@@ -1,37 +1,82 @@
 #include <iostream>
-#include <ctime>
-#include <iomanip>
+#include <getopt.h>
+#include <string>
+#include <vector>
+#include <iomanip> // Tablo görünümü için
 #include "analyzer.hpp"
 
 using namespace std;
 
-int main() {
-    srand(time(0));
-    cout << "===============================================" << endl;
-    cout << "  MASTER CACHE ANALYZER & SIMULATOR (v1.0)     " << endl;
-    cout << "===============================================" << endl;
-    cout << "[1/2] Benchmarking Hardware Latencies..." << endl;
+void print_help() {
+    cout << "Usage: ./cache_analyzer [options]\n"
+         << "Options:\n"
+         << "  -s, --size <bytes>    Specific memory size to test\n"
+         << "  -i, --iter <count>    Number of iterations (default: 10M)\n"
+         << "  -a, --all             Sweep all cache levels (L1 to RAM)\n"
+         << "  -h, --help            Show this help message\n";
+}
 
+int main(int argc, char* argv[]) {
+    Config conf;
+    int opt;
+    bool sweep_mode = true; // Varsayılan olarak tümünü tara
 
-    LatencyMetrics metrics;
-    metrics.l1 = measure_latency(16 * 1024);
-    metrics.l2 = measure_latency(256 * 1024);
-    metrics.l3 = measure_latency(4 * 1024 * 1024);
-    metrics.ram = measure_latency(128 * 1024 * 1024);   
+    static struct option long_options[] = {
+        {"size", required_argument, 0, 's'},
+        {"iter", required_argument, 0, 'i'},
+        {"all",  no_argument,       0, 'a'},
+        {"help", no_argument,       0, 'h'},
+        {0, 0, 0, 0}
+    };
 
-    cout << fixed << setprecision(2);
-    cout << "Measurement Complete:" << endl;
-    cout << " > L1 Latency:  " << metrics.l1 << " ns" << endl;
-    cout << " > L2 Latency:  " << metrics.l2 << " ns" << endl;
-    cout << " > L3 Latency:  " << metrics.l3 << " ns" << endl;
-    cout << " > RAM Latency: " << metrics.ram << " ns" << endl;
+    while ((opt = getopt_long(argc, argv, "s:i:ah", long_options, NULL)) != -1) {
+        switch (opt) {
+            case 's':
+                conf.buffer_size = stoll(optarg);
+                sweep_mode = false; // Özel boyut girilirse tekli ölçüm yap
+                break;
+            case 'i': conf.iterations = stoll(optarg); break;
+            case 'a': sweep_mode = true; break;
+            case 'h': print_help(); return 0;
+            default: print_help(); return 1;
+        }
+    }
 
-    cout << "\n[2/2] Starting Simulation with Real-World Metrics..." << endl;
+    cout << "--- CACHE HIERARCHY ANALYSIS STARTING ---" << endl;
+    cout << "Iterations per test: " << conf.iterations << endl << endl;
 
+    // Tablo başlığı
+    cout << left << setw(15) << "LEVEL" << setw(15) << "SIZE" << "LATENCY" << endl;
+    cout << "---------------------------------------------" << endl;
 
-    run_simulation(metrics);
+    if (sweep_mode) {
+        // Hiyerarşik tarama listesi (L1, L2, L3, RAM eşikleri)
+        vector<pair<string, size_t>> levels = {
+            {"L1 Cache", 16 * 1024},          // 16 KB
+            {"L1/L2 Border", 64 * 1024},      // 64 KB
+            {"L2 Cache", 256 * 1024},         // 256 KB
+            {"L3 Cache", 4 * 1024 * 1024},    // 4 MB
+            {"Main RAM", 128 * 1024 * 1024}   // 128 MB
+        };
 
-    cout << "Note: Phase 2 will integrate eBPF & PMU for live HW counters." << endl;
+        for (const auto& level : levels) {
+            conf.buffer_size = level.second;
+            Result res = measure_latency(conf);
+
+            cout << left << setw(15) << level.first
+                 << setw(15) << to_string(level.second / 1024) + " KB"
+                 << fixed << setprecision(3) << res.latency_ns << " ns" << endl;
+        }
+    } else {
+        // Kullanıcının girdiği tekli ölçüm
+        Result res = measure_latency(conf);
+        cout << left << setw(15) << "Custom"
+             << setw(15) << to_string(conf.buffer_size / 1024) + " KB"
+             << fixed << setprecision(3) << res.latency_ns << " ns" << endl;
+    }
+
+    cout << "---------------------------------------------" << endl;
+    cout << "Analysis Complete." << endl;
 
     return 0;
 }
