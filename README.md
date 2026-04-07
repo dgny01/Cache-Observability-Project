@@ -1,68 +1,66 @@
-# Cache-Observability-Project (v1.0)
+# Cache-Observability-Project (v1.1) 
 
-A high-performance system analysis tool designed to bridge the gap between **Software Logic** and **Hardware Reality**. This project measures real-world memory latencies and simulates cache hierarchy performance, with a roadmap toward **eBPF-powered hardware counter** integration.
-
----
-
-## Overview
-
-Modern software performance is often bottlenecked by the memory hierarchy (L1, L2, L3, and RAM). This project provides:
-1. **Hardware Benchmarking:** Using **Pointer Chasing** to bypass CPU prefetchers and measure real nanosecond-level latencies.
-2. **Performance Simulation:** Analyzing how Cache Hit/Miss ratios affect execution time using real-world hardware metrics.
-3. **Observability Roadmap:** Transitioning from software-only simulation to **eBPF & PMU (Performance Monitoring Unit)** integration to capture live hardware events.
-
-
+A high-performance system analysis tool designed to bridge the gap between **Software Logic** and **Hardware Reality**. This project measures real-world memory latencies across the CPU cache hierarchy using advanced systems programming techniques.
 
 ---
 
-## Features
+## 🔍 Overview
 
-* **Bypassing Prefetchers:** Implements a `volatile` pointer chasing engine to ensure the CPU cannot "guess" the next memory address, yielding authentic latency data.
-* **Memory Hierarchy Awareness:** Specifically targets typical L1 (16KB), L2 (256KB), L3 (4MB), and RAM (128MB+) boundaries.
-* **Efficiency Analysis:** Calculates the "Performance Boost" provided by the cache system compared to raw RAM access.
-* **Dockerized Monitoring:** Ready to be integrated with **Prometheus & Grafana** for real-time visualization of system stress.
+Modern software performance is often bottlenecked by the memory hierarchy. This tool provides an empirical look at how data travels between the CPU and RAM.
+
+* **Hardware Benchmarking:** Uses **Random Pointer Chasing** to bypass CPU hardware prefetchers, ensuring authentic nanosecond-level latency data.
+* **Hierarchy Awareness:** Specifically targets and identifies transitions between **L1, L2, L3 caches, and Main RAM**.
+* **Observability Ready:** Engineered to export structured data (CSV/JSON) for integration with modern monitoring stacks like Prometheus and Grafana.
 
 ---
 
-## Quick Start
+##  Features
+
+* **Prefetcher Defeat:** Implements a `volatile` pointer chasing engine. By making the next memory address dependent on the current one in a shuffled array, we force the CPU to wait for the full round-trip time.
+* **Modular Architecture:** Cleanly separated into `benchmark`, `simulator`, and `report` modules for high maintainability.
+* **CLI Interface:** Fully controllable via command-line arguments (size, iterations, sweep modes).
+* **Automated Sweep:** A one-command mode to map the entire memory subsystem of the host machine.
+
+---
+
+##  Build & Run
 
 ### Prerequisites
-* GCC/G++ Compiler
-* Linux Environment (Recommended for Phase 2 eBPF features)
+* **GCC/G++ Compiler**
+* **Make** build tool
+* **Linux Environment** (Recommended for performance counter accuracy)
 
-### Build & Run
+### Compilation
+The project uses a `Makefile` to manage the build process. The binary is generated in the `build/` directory to keep the workspace clean.
 ```bash
-# Clone the repository
-git clone [https://github.com/dgny01/Cache-Observability-Project.git](https://github.com/dgny01/Cache-Observability-Project.git)
+make
 
-# Navigate to the project directory
-cd Cache-Observability-Project
+# 1. Automated Hierarchy Sweep (Recommended)
+./build/cache_analyzer --all
 
-# Compile the analyzer
-g++ -O3 main.cpp -o cache_analyzer
+# 2. Test a specific buffer size (e.g., 2MB)
+./build/cache_analyzer -s 2097152
 
-# Run the simulation
-./cache_analyzer
-```
+# 3. Custom Iterations (For higher precision)
+./build/cache_analyzer --all -i 50000000
 
+Understanding the Physics
+Engineering Note on RAM Latency: > You will notice RAM latency values around 80-120ns. This is a sign of measurement accuracy. By using random access patterns, we bypass the CPU's ability to "predict" the next data block (Prefetching). This reveals the true physical latency of the DRAM cells, which is the ultimate bottleneck in modern computing.
 
 Roadmap & eBPF Integration
-This project is evolving following a structured systems engineering path:
+This project follows a structured systems engineering evolution:
 
-[x] Phase 1: C++ Memory Latency Benchmarking & Simulation.
+[x] Phase 1: C++ Memory Latency Benchmarking (Modular & CLI-ready).
 
-[ ] Phase 2: Integration of bpftrace for VFS-level event capturing.
+[ ] Phase 2: Integration of bpftrace for VFS and Memory-level event capturing.
 
-[ ] Phase 3: Using perf_event_open via eBPF to access Hardware Performance Counters (PMU).
+[ ] Phase 3: Using perf_event_open via eBPF to access PMU (Performance Monitoring Units) for L1/LLC Cache Miss tracking.
 
-[ ] Phase 4: Live dashboard comparing Predicted Hit Rate vs. Actual HW Cache Misses.
-
+[ ] Phase 4: Live Grafana dashboard comparing Software Simulations vs. Actual Hardware Events.
 
 Acknowledgments
-Special thanks to @Uğurcan Caykara for the guidance on perf_event_open and hardware counter strategies (L1D, L1I, and LLC monitoring). This project aims to contribute to the system programming community as a tutorial-grade exercise.
+Special thanks to the system programming community and mentors for insights into perf_event_open and hardware counter strategies.
 
+Author: Doğanay Yıldız
 
-Author
-Doğanay Yıldız 3rd Year Computer Engineering Student GitHub | LinkedIn
-
-Measuring the invisible at the kernel level.
+3rd Year Computer Engineering Student "Measuring the invisible at the kernel level."
