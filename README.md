@@ -1,11 +1,11 @@
-# Cache-Observability-Project (v1.1) 🚀
+# Cache-Observability-Project (v1.1) 
 
 A high-performance system analysis tool designed to bridge the gap between **Software Logic** and **Hardware Reality**.  
 This project measures real-world memory latencies across the CPU cache hierarchy using advanced systems programming techniques.
 
 ---
 
-## 🔍 Overview
+##  Overview
 
 Modern software performance is often bottlenecked by the memory hierarchy. This tool provides an empirical look at how data travels between the CPU and RAM.
 
@@ -15,7 +15,7 @@ Modern software performance is often bottlenecked by the memory hierarchy. This 
 
 ---
 
-## ✨ Features
+##  Features
 
 - **Prefetcher Defeat:** Implements a volatile pointer chasing engine. By making the next memory address dependent on the current one in a shuffled array, we force the CPU to wait for the full round-trip time.
 - **Modular Architecture:** Cleanly separated into benchmark, simulator, and report modules for high maintainability.
@@ -24,7 +24,7 @@ Modern software performance is often bottlenecked by the memory hierarchy. This 
 
 ---
 
-## 🛠️ Build & Run
+##  Build & Run
 
 ### Prerequisites
 
@@ -46,12 +46,12 @@ Usage Examples
 1. Automated Hierarchy Sweep (Recommended)
 ./build/cache_analyzer --all
 
-Test a specific buffer size (e.g., 2MB)
+2. Test a specific buffer size (e.g., 2MB)
 ./build/cache_analyzer -s 2097152
 
-Custom Iterations (For higher precision)
+3. Custom Iterations (For higher precision)
 ./build/cache_analyzer --all -i 50000000
-
+``` 
 Understanding the Physics
 Engineering Note on RAM Latency
 
