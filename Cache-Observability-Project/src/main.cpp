@@ -2,7 +2,7 @@
 #include <getopt.h>
 #include <string>
 #include <vector>
-#include <iomanip> // Tablo görünümü için
+#include <iomanip> 
 #include "analyzer.hpp"
 
 using namespace std;
@@ -19,7 +19,7 @@ void print_help() {
 int main(int argc, char* argv[]) {
     Config conf;
     int opt;
-    bool sweep_mode = true; // Varsayılan olarak tümünü tara
+    bool sweep_mode = true;
 
     static struct option long_options[] = {
         {"size", required_argument, 0, 's'},
@@ -33,7 +33,7 @@ int main(int argc, char* argv[]) {
         switch (opt) {
             case 's':
                 conf.buffer_size = stoll(optarg);
-                sweep_mode = false; // Özel boyut girilirse tekli ölçüm yap
+                sweep_mode = false; 
                 break;
             case 'i': conf.iterations = stoll(optarg); break;
             case 'a': sweep_mode = true; break;
@@ -50,13 +50,13 @@ int main(int argc, char* argv[]) {
     cout << "---------------------------------------------" << endl;
 
     if (sweep_mode) {
-        // Hiyerarşik tarama listesi (L1, L2, L3, RAM eşikleri)
+       
         vector<pair<string, size_t>> levels = {
-            {"L1 Cache", 16 * 1024},          // 16 KB
-            {"L1/L2 Border", 64 * 1024},      // 64 KB
-            {"L2 Cache", 256 * 1024},         // 256 KB
-            {"L3 Cache", 4 * 1024 * 1024},    // 4 MB
-            {"Main RAM", 128 * 1024 * 1024}   // 128 MB
+            {"L1 Cache", 16 * 1024},          
+            {"L1/L2 Border", 64 * 1024},      
+            {"L2 Cache", 256 * 1024},         
+            {"L3 Cache", 4 * 1024 * 1024},    
+            {"Main RAM", 128 * 1024 * 1024}  
         };
 
         for (const auto& level : levels) {
