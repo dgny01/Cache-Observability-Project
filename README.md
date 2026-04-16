@@ -2,6 +2,9 @@
 
 <img width="1824" height="881" alt="Ekran Görüntüsü - 2026-04-13 20-51-24" src="https://github.com/user-attachments/assets/91f92010-8fc0-4141-8b94-6f0fd3498745" />
 
+## 🏗 Architecture Diagram
+
+<pre>
 ┌───────────────────────────────────────────────────────────────────────────────┐
 │                    Cache-Observability-Project (v1.2)                          │
 │        High-Performance Cache Hierarchy Benchmark + Observability Stack        │
@@ -69,6 +72,7 @@
                    │            Docker Compose Deployment              │
                    │   Analyzer + Prometheus + Grafana (Single Stack)  │
                    └──────────────────────────────────────────────────┘
+</pre>
 
 **A high-performance system analysis tool designed to bridge the gap between Software Logic and Hardware Reality.**  
 This project measures real-world memory latencies across the CPU cache hierarchy and correlates them with kernel-level events.
@@ -316,8 +320,8 @@ Metrics available at: http://localhost:8080/metrics
 Roadmap
 ✅ Phase 1: C++ Modular CLI & Benchmarking Engine
 ✅ Phase 2: Dockerization & Prometheus/Grafana Integration
-  Phase 3: eBPF Integration (kprobes) to capture context switches during benchmarks
-  Phase 4: Comparative Analysis: Software Simulations vs Actual Hardware Events
+Phase 3: eBPF Integration (kprobes) to capture context switches during benchmarks
+Phase 4: Comparative Analysis: Software Simulations vs Actual Hardware Events
 
  Acknowledgments
 
