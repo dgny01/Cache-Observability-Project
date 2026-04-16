@@ -1,4 +1,4 @@
-# Cache-Observability-Project (v1.2)
+# CacheScope
 
 <img width="1824" height="881" alt="Ekran Görüntüsü - 2026-04-13 20-51-24" src="https://github.com/user-attachments/assets/91f92010-8fc0-4141-8b94-6f0fd3498745" />
 
