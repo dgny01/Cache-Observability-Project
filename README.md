@@ -323,15 +323,31 @@ Roadmap
 Phase 3: eBPF Integration (kprobes) to capture context switches during benchmarks
 Phase 4: Comparative Analysis: Software Simulations vs Actual Hardware Events
 
- Acknowledgments
+## 🧩 eBPF Correlation (Planned)
 
-Special thanks to:
+In upcoming versions, this project will integrate **eBPF tracing** to capture kernel-level events during benchmarking.
 
-the systems programming community
-Rafael David Tinoco for kernel isolation insights
-my mentors at Kloia for guidance on observability patterns
+The goal is to correlate:
 
-uthor
+- **User-space measured latency (ns)**
+- **Kernel events observed via eBPF**
+  - context switches
+  - scheduler delays
+  - interrupts
+
+This enables a direct comparison between *measured micro-latency spikes* and the actual kernel activity that caused them.
+
+### Expected Output (Correlation Concept)
+
+| Timestamp | User Latency (ns) | eBPF Event | Details |
+|----------|--------------------|------------|---------|
+| t0       | 4.1 ns             | -          | L2 hit |
+| t1       | 150 ns             | context_switch | task migrated |
+| t2       | 98 ns              | irq_handler | interrupt fired |
+
+This will help identify whether latency anomalies are caused by **real hardware cache misses** or **kernel scheduling noise**.
+
+Author
 
 Doğanay Yıldız
 3rd Year Computer Engineering Student
