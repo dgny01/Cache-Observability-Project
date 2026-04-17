@@ -323,7 +323,7 @@ Roadmap
 Phase 3: eBPF Integration (kprobes) to capture context switches during benchmarks
 Phase 4: Comparative Analysis: Software Simulations vs Actual Hardware Events
 
-## 🧩 eBPF Correlation (Planned)
+##  eBPF Correlation (Planned)
 
 In upcoming versions, this project will integrate **eBPF tracing** to capture kernel-level events during benchmarking.
 
