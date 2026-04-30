@@ -1,5 +1,7 @@
 # ***CacheScop***
 
+CacheScop is a low-level systems observability tool that benchmarks CPU cache hierarchy latency and correlates it with kernel-level pressure signals.
+
 <img width="1824" height="881" alt="Ekran Görüntüsü - 2026-04-13 20-51-24" src="https://github.com/user-attachments/assets/91f92010-8fc0-4141-8b94-6f0fd3498745" />
 
 ##  Architecture Diagram
@@ -97,6 +99,18 @@ It combines:
 
 ---
 
+## Predictive Reliability
+
+This project does not only measure system performance, but also aims to predict future system instability. By analyzing CPU stall patterns, memory pressure trends, and latency variance, it can detect early signals of potential service degradation such as TCP backlog saturation and scheduling bottlenecks.
+
+---
+
+## Non-Invasive Maintainability
+
+The observability layer is designed to be non-intrusive and does not require any modification to application code. Using eBPF (planned), PSI metrics, and Prometheus exporters, the system collects kernel-level and hardware-level signals while keeping the software stack clean and maintainable.
+
+---
+
 ##  Key Goals
 
 - Measure real-world latency differences between **L1, L2, L3 and RAM**
@@ -107,7 +121,15 @@ It combines:
 
 ---
 
+## R&D CONTEXT 
+R&D Context (Systems Research Perspective)
+
+This project is not only a performance measurement tool but also an applied research system that investigates hardware-software interaction boundaries. It explores how kernel scheduling, memory hierarchy behavior, and CPU execution stalls interact in real-world systems.
+
+---
+
 ##  Why This Matters
+A system rarely fails instantly. In most cases, failure is a chain reaction starting from CPU stalls, followed by memory pressure, leading to queue buildup (TCP backlog) and eventually service degradation. This project aims to make this hidden chain observable and measurable.
 
 Even perfectly optimized software can stall if memory access becomes slow.  
 Understanding cache transitions is crucial for:
@@ -121,6 +143,8 @@ Understanding cache transitions is crucial for:
 ---
 
 ##  Features
+Predictive latency trend detection (CPU stall → backlog risk modeling)
+Non-invasive kernel observability architecture (eBPF-ready design)
 
 ###  Hardware Benchmarking (Pointer Chasing Engine)
 Uses **Random Pointer Chasing** to bypass hardware prefetchers, ensuring authentic nanosecond-level latency measurements.
@@ -323,6 +347,12 @@ Roadmap
 Phase 3: eBPF Integration (kprobes) to capture context switches during benchmarks
 Phase 4: Comparative Analysis: Software Simulations vs Actual Hardware Events
 
+## Kernel-Level Predictive Correlation (Conceptual Layer)
+
+Before full eBPF integration, this project defines a correlation model between user-space latency measurements and kernel-level events. The goal is to identify whether performance anomalies originate from hardware cache behavior or kernel scheduling activity.
+
+---
+
 ##  eBPF Correlation (Planned)
 
 In upcoming versions, this project will integrate **eBPF tracing** to capture kernel-level events during benchmarking.
@@ -346,6 +376,8 @@ This enables a direct comparison between *measured micro-latency spikes* and the
 | t2       | 98 ns              | irq_handler | interrupt fired |
 
 This will help identify whether latency anomalies are caused by **real hardware cache misses** or **kernel scheduling noise**.
+
+This project is evolving toward a predictive systems reliability engine that bridges kernel observability, hardware behavior, and performance engineering.
 
 Author
 
